@@ -14,24 +14,32 @@ import com.orange.common.utils.http.HttpDownload;
 
 public class WeiboMaker {
 	
+	// TODO improve naming
 	String SINA_APP_KEY ;
 	String SINA_APP_SECRET;
 	
+	// TODO improve naming
 	String oauth_token;
 	String oauth_secret;
+
 	String text;
 	String imageUrl;
 	File imageFile;
+
+	// TODO improve naming
 	String LocalPath = "D:/tmp/";
+
 	List<Status> userStatusList;
 	SinaWeiboSNS weibo;
 	SNSRequest weiboRequest;
 
-	
+
+	// TODO improve naming
 	public WeiboMaker(String sINA_APP_KEY, String sINA_APP_SECRET,
 			String oauth_token, String oauth_secret, String text,
 			String imageUrl) {
 		super();
+		
 		SINA_APP_KEY = sINA_APP_KEY;
 		SINA_APP_SECRET = sINA_APP_SECRET;
 		this.oauth_token = oauth_token;
@@ -40,11 +48,12 @@ public class WeiboMaker {
 		this.imageUrl = imageUrl;
 		this.imageFile = getHttpImage();
 		weibo = new SinaWeiboSNS(SINA_APP_KEY, SINA_APP_SECRET);
+		
+		// TODO what is 2 mean?
 		weiboRequest = new SNSRequest(2, text, this.imageFile, this.oauth_token, this.oauth_secret);
+		
 		this.userStatusList = weibo.getRecentWeibo(sINA_APP_KEY, sINA_APP_SECRET, weiboRequest, 20);
 	}
-
-
 	
 	@Override
 	public String toString() {
@@ -64,7 +73,7 @@ public class WeiboMaker {
 		try {
 			imageTempName = URLEncoder.encode(this.imageUrl, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
+			// TODO use log4j to print log
 			e.printStackTrace();
 		}
 		
@@ -100,7 +109,7 @@ public class WeiboMaker {
 	public boolean weibosend(){
 		weibo.publishWeibo(SINA_APP_KEY, SINA_APP_SECRET, weiboRequest);
 		if(imageFile != null)
-		this.imageFile.delete();
+		this.imageFile.delete();		// TODO set right code indent
 		return true;
 	}
 
