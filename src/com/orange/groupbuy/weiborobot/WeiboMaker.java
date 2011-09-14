@@ -1,7 +1,6 @@
 package com.orange.groupbuy.weiborobot;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
@@ -14,43 +13,52 @@ import com.orange.common.utils.http.HttpDownload;
 
 public class WeiboMaker {
 	
-	String SINA_APP_KEY ;
-	String SINA_APP_SECRET;
+	public static final int REQUEST_Type_QQ_WEIBO = 1;
+	public static final int REQUEST_Type_SINA_WEIBO = 2;
+	public static final int REQUEST_Type_RENREN = 3;
+	public static final String LOCAL_PATH = "D:/tmp/";
 	
-	String oauth_token;
-	String oauth_secret;
+	String sinaAppKey ;
+	String sinaAppSecret ;
+	
+	String oauthToken ;
+	String oauthSecret;
+
 	String text;
 	String imageUrl;
 	File imageFile;
-	String LocalPath = "D:/tmp/";
+
 	List<Status> userStatusList;
 	SinaWeiboSNS weibo;
 	SNSRequest weiboRequest;
 
 	
-	public WeiboMaker(String sINA_APP_KEY, String sINA_APP_SECRET,
-			String oauth_token, String oauth_secret, String text,
-			String imageUrl) {
+	public WeiboMaker(String inputSinaAppKey, String inputSinaAppSecret,
+			String inputOauthToken, String inputOauthSecret, String inputText,
+			String inputImageUrl) {
 		super();
-		SINA_APP_KEY = sINA_APP_KEY;
-		SINA_APP_SECRET = sINA_APP_SECRET;
-		this.oauth_token = oauth_token;
-		this.oauth_secret = oauth_secret;
-		this.text = text;
-		this.imageUrl = imageUrl;
+		
+		this.sinaAppKey = inputSinaAppKey;
+		this.sinaAppSecret = inputSinaAppSecret;
+		this.oauthToken = inputOauthToken;
+		this.oauthSecret = inputOauthSecret;
+		this.text = inputText;
+		this.imageUrl = inputImageUrl;
 		this.imageFile = getHttpImage();
-		weibo = new SinaWeiboSNS(SINA_APP_KEY, SINA_APP_SECRET);
-		weiboRequest = new SNSRequest(2, text, this.imageFile, this.oauth_token, this.oauth_secret);
-		this.userStatusList = weibo.getRecentWeibo(sINA_APP_KEY, sINA_APP_SECRET, weiboRequest, 20);
+		weibo = new SinaWeiboSNS(sinaAppKey, sinaAppSecret);
+		
+		weiboRequest = new SNSRequest(REQUEST_Type_SINA_WEIBO, inputText, this.imageFile, this.oauthToken, this.oauthSecret);
+		
+		this.userStatusList = weibo.getRecentWeibo(inputSinaAppKey, inputSinaAppSecret, weiboRequest, 20);
 	}
 
 
 	
 	@Override
 	public String toString() {
-		return "WeiboMaker [SINA_APP_KEY=" + SINA_APP_KEY
-				+ ", SINA_APP_SECRET=" + SINA_APP_SECRET + ", oauth_token="
-				+ oauth_token + ", oauth_secret=" + oauth_secret + ", text="
+		return "WeiboMaker [SINA_APP_KEY=" + sinaAppKey
+				+ ", SINA_APP_SECRET=" + sinaAppSecret + ", oauth_token="
+				+ oauthToken + ", oauth_secret=" + oauthSecret + ", text="
 				+ text + ", imageFile=" + imageUrl + ", userStatus="
 				+ userStatusList + ", testWeibo=" + weibo + ", testReq="
 				+ weiboRequest + "]";
@@ -68,18 +76,19 @@ public class WeiboMaker {
 			e.printStackTrace();
 		}
 		
-		if(HttpDownload.downloadFile(this.imageUrl, this.LocalPath+imageTempName))
+		if(HttpDownload.downloadFile(this.imageUrl, LOCAL_PATH+imageTempName))
 		{
-			imageFile = new File(this.LocalPath+imageTempName);
+			imageFile = new File(LOCAL_PATH+imageTempName);
 		}
 		if(imageFile.canRead())
-				return imageFile;		
+			return imageFile;		
 		else
 			return null;
 	}
 
 	
 	public boolean weiboCheck(String text){
+		
 		if(userStatusList != null)
 		{
 			for(Status status : userStatusList)
@@ -98,9 +107,11 @@ public class WeiboMaker {
 	}
 	
 	public boolean weibosend(){
-		weibo.publishWeibo(SINA_APP_KEY, SINA_APP_SECRET, weiboRequest);
+		weibo.publishWeibo(sinaAppKey, sinaAppSecret, weiboRequest);
+
 		if(this.imageFile != null)
-		this.imageFile.delete();
+			this.imageFile.delete();
+
 		return true;
 	}
 
