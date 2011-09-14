@@ -44,7 +44,7 @@ public class WeiboSenderTimerTask extends TimerTask {
 		if(weibo.weiboCheck(titleText))
 			weibo.weibosend();
 		else
-			System.out.println("\n\n\n\nthis product had sent once,don't send it again!\n\n\n");
+			System.out.println("this product had sent once,don't send it again!\n");
 
 		// TODO Auto-generated method stub
 

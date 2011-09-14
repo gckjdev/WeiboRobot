@@ -19,7 +19,7 @@ public class RobotServer {
     	java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("M/dd/yyyy hh:mm:ss a",java.util.Locale.US); 
     	java.util.Date dateMorning = formatter.parse("9/11/2011 8:30:00 AM");  
     	java.util.Date dateNoon = formatter.parse("9/11/2011 11:59:59 AM");
-    	java.util.Date dateNite = formatter.parse("9/11/2011 6:00:00 PM");
+    	java.util.Date dateNite = formatter.parse("9/11/2011 7:00:00 PM");
 
     	weiboTaskTimer.schedule(morningWeiboSender, dateMorning, 1000*60*60*24);
     	weiboTaskTimer.schedule(noonWeiboSender, dateNoon, 1000*60*60*24);

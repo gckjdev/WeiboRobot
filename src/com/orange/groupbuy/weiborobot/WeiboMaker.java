@@ -99,7 +99,7 @@ public class WeiboMaker {
 	
 	public boolean weibosend(){
 		weibo.publishWeibo(SINA_APP_KEY, SINA_APP_SECRET, weiboRequest);
-		if(imageFile != null)
+		if(this.imageFile != null)
 		this.imageFile.delete();
 		return true;
 	}
