@@ -55,12 +55,6 @@ public class WeiboSenderTimerTask extends TimerTask {
 		else
 			log.info("Product "+topProduct.getId()+"had sent once,don't send it again!");
 
-			// TODO use log4j instead of System.out.println
-			// TODO message can be refined
-			
-
-
-
 	}
 
 	public WeiboSenderTimerTask(String city, int maxCount, int startOffset,
